@@ -1,0 +1,155 @@
+@use '../styles/variables' as *;
+
+.builder-page {
+  &__steps {
+    display: flex;
+    justify-content: center;
+    gap: $space-md;
+    margin-bottom: $space-xl;
+  }
+
+  &__step {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.85rem;
+    background: $bg-card;
+    color: $text-muted;
+    border: 2px solid $border-color;
+    transition: all 0.3s;
+
+    &--active {
+      background: $primary;
+      color: $bg-dark;
+      border-color: $primary;
+    }
+  }
+
+  &__section {
+    max-width: 800px;
+    margin: 0 auto;
+
+    &-title {
+      @include section-title;
+      text-align: center;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xl;
+  }
+
+  &__field {
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: $space-sm;
+      color: $text-primary;
+    }
+
+    input[type='range'] {
+      width: 100%;
+      accent-color: $primary;
+      background: transparent;
+      border: none;
+      padding: 0;
+
+      &:focus { box-shadow: none; }
+    }
+  }
+
+  &__days, &__levels {
+    display: flex;
+    gap: $space-sm;
+    flex-wrap: wrap;
+  }
+
+  &__day-btn, &__level-btn {
+    @include button-outline;
+    padding: $space-sm $space-lg;
+    text-transform: capitalize;
+
+    &--active {
+      background: $primary;
+      color: $bg-dark;
+      border-color: $primary;
+    }
+  }
+
+  &__equip {
+    display: flex;
+    gap: $space-sm;
+    flex-wrap: wrap;
+  }
+
+  &__equip-btn {
+    @include button-outline;
+    padding: $space-xs $space-md;
+    font-size: 0.85rem;
+    text-transform: capitalize;
+
+    &--active {
+      background: rgba($primary, 0.15);
+      border-color: $primary;
+      color: $primary;
+    }
+  }
+
+  &__gen-btn {
+    @include button-primary;
+    padding: $space-md $space-xl;
+    font-size: 1rem;
+    align-self: center;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $space-md;
+    justify-content: center;
+    margin-top: $space-xl;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  &__action-btn {
+    padding: $space-sm $space-lg;
+    border-radius: $radius-sm;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &--primary {
+      @include button-primary;
+    }
+
+    &--outline {
+      @include button-outline;
+    }
+  }
+
+  &__login-hint {
+    font-size: 0.85rem;
+    color: $text-muted;
+  }
+
+  &__done {
+    text-align: center;
+    padding: $space-2xl 0;
+
+    h2 {
+      font-size: 2rem;
+      margin-bottom: $space-md;
+    }
+
+    p {
+      color: $text-secondary;
+      margin-bottom: $space-xl;
+    }
+  }
+}

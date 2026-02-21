@@ -1,0 +1,31 @@
+@use '../styles/variables' as *;
+
+.my-routines {
+  &__auth-prompt, &__empty {
+    text-align: center;
+    padding: $space-2xl 0;
+
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: $space-md;
+    }
+
+    p {
+      color: $text-secondary;
+      margin-bottom: $space-xl;
+    }
+  }
+
+  &__login-btn, &__build-btn {
+    @include button-primary;
+    display: inline-block;
+    padding: $space-md $space-xl;
+    text-decoration: none;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2xl;
+  }
+}

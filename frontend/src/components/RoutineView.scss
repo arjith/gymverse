@@ -1,0 +1,114 @@
+@use '../styles/variables' as *;
+
+.routine-view {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $space-xl;
+    flex-wrap: wrap;
+    gap: $space-md;
+  }
+
+  &__name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $text-primary;
+    margin-bottom: $space-sm;
+  }
+
+  &__meta {
+    display: flex;
+    gap: $space-sm;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &__badge {
+    @include badge($primary);
+
+    &--info {
+      background: rgba($info, 0.15);
+      color: $info;
+    }
+  }
+
+  &__info {
+    font-size: 0.85rem;
+    color: $text-secondary;
+  }
+
+  &__delete {
+    @include button-outline;
+    color: $danger;
+    border-color: $danger;
+    font-size: 0.85rem;
+
+    &:hover {
+      background: rgba($danger, 0.1);
+    }
+  }
+
+  &__days {
+    display: flex;
+    flex-direction: column;
+    gap: $space-xl;
+  }
+
+  &__day {
+    @include card;
+
+    &-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: $space-md;
+      color: $text-primary;
+
+      span {
+        color: $primary;
+        text-transform: capitalize;
+      }
+    }
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+
+    th {
+      text-align: left;
+      padding: $space-sm;
+      color: $text-muted;
+      font-weight: 600;
+      border-bottom: 1px solid $border-color;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: $space-sm;
+      color: $text-secondary;
+      border-bottom: 1px solid rgba($border-color, 0.5);
+    }
+  }
+
+  &__exname {
+    color: $text-primary !important;
+    font-weight: 500;
+  }
+
+  &__cardio {
+    margin-top: $space-md;
+    padding: $space-sm $space-md;
+    background: rgba($primary, 0.05);
+    border-radius: $radius-sm;
+    font-size: 0.85rem;
+    color: $text-secondary;
+
+    strong {
+      color: $primary;
+    }
+  }
+}

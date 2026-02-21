@@ -1,0 +1,99 @@
+@use '../styles/variables' as *;
+
+.navbar {
+  background: rgba($bg-dark, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid $border-color;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+
+  &__inner {
+    max-width: $wide;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $space-md $space-lg;
+    gap: $space-lg;
+  }
+
+  &__logo {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+    text-decoration: none;
+
+    &-icon { font-size: 1.5rem; }
+    &-text {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: $primary;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  &__links {
+    display: flex;
+    gap: $space-xs;
+
+    @include responsive($tablet) {
+      display: none;
+    }
+  }
+
+  &__link {
+    padding: $space-sm $space-md;
+    border-radius: $radius-sm;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: $text-secondary;
+    text-decoration: none;
+    transition: all 0.2s;
+
+    &:hover {
+      color: $text-primary;
+      background: rgba($primary, 0.08);
+    }
+
+    &--active {
+      color: $primary;
+      background: rgba($primary, 0.1);
+    }
+  }
+
+  &__auth {
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+  }
+
+  &__user {
+    font-size: 0.85rem;
+    color: $text-secondary;
+    margin-right: $space-xs;
+  }
+
+  &__btn {
+    padding: $space-xs $space-md;
+    border-radius: $radius-sm;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    border: none;
+
+    &--primary {
+      @include button-primary;
+      padding: $space-xs $space-md;
+      font-size: 0.85rem;
+    }
+
+    &--outline {
+      @include button-outline;
+      padding: $space-xs $space-md;
+      font-size: 0.85rem;
+    }
+  }
+}

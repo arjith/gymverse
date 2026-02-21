@@ -1,0 +1,74 @@
+@use '../styles/variables' as *;
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+
+  &__form {
+    @include card;
+    max-width: 420px;
+    width: 100%;
+    padding: $space-xl;
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: $space-xs;
+  }
+
+  &__subtitle {
+    text-align: center;
+    color: $text-secondary;
+    margin-bottom: $space-xl;
+    font-size: 0.9rem;
+  }
+
+  &__field {
+    margin-bottom: $space-md;
+
+    label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.85rem;
+      margin-bottom: $space-xs;
+      color: $text-secondary;
+    }
+
+    input {
+      width: 100%;
+    }
+  }
+
+  &__submit {
+    @include button-primary;
+    width: 100%;
+    padding: $space-md;
+    margin-top: $space-md;
+  }
+
+  &__switch {
+    text-align: center;
+    margin-top: $space-lg;
+    font-size: 0.85rem;
+    color: $text-secondary;
+
+    a {
+      color: $primary;
+      font-weight: 600;
+    }
+  }
+
+  &__demo {
+    text-align: center;
+    margin-top: $space-md;
+    font-size: 0.8rem;
+    color: $text-muted;
+    background: rgba($primary, 0.05);
+    padding: $space-sm;
+    border-radius: $radius-sm;
+  }
+}

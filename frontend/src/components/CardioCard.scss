@@ -1,0 +1,81 @@
+@use '../styles/variables' as *;
+
+.fun-stars {
+  &__star {
+    color: $star-inactive;
+    font-size: 0.9rem;
+
+    &--active {
+      color: $star-active;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.cardio-card {
+  @include card;
+  cursor: pointer;
+
+  &--highlight {
+    border-color: $primary;
+    box-shadow: 0 0 20px rgba($primary, 0.15);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba($primary, 0.15); }
+    50% { box-shadow: 0 0 30px rgba($primary, 0.3); }
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $space-sm;
+  }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  &__desc {
+    font-size: 0.85rem;
+    color: $text-secondary;
+    margin-bottom: $space-md;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__meta {
+    display: flex;
+    gap: $space-sm;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: $space-sm;
+  }
+
+  &__category {
+    @include badge($info);
+  }
+
+  &__intensity {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  &__cal {
+    font-size: 0.8rem;
+    color: $text-secondary;
+  }
+
+  &__duration {
+    font-size: 0.8rem;
+    color: $text-muted;
+  }
+}

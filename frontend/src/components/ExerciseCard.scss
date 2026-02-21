@@ -1,0 +1,67 @@
+@use '../styles/variables' as *;
+
+.exercise-card {
+  @include card;
+  cursor: pointer;
+
+  &--compact {
+    padding: $space-md;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $space-sm;
+  }
+
+  &__name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $text-primary;
+  }
+
+  &__difficulty {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__meta {
+    display: flex;
+    gap: $space-sm;
+    margin-bottom: $space-sm;
+    flex-wrap: wrap;
+  }
+
+  &__muscle, &__equipment {
+    @include badge($primary);
+  }
+
+  &__equipment {
+    background: rgba($info, 0.15);
+    color: $info;
+  }
+
+  &__tags {
+    display: flex;
+    gap: $space-xs;
+    flex-wrap: wrap;
+    margin-bottom: $space-sm;
+  }
+
+  &__tag {
+    font-size: 0.7rem;
+    color: $text-muted;
+    background: rgba(255,255,255,0.05);
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+
+  &__alts {
+    font-size: 0.8rem;
+    color: $primary;
+    margin-top: $space-xs;
+  }
+}

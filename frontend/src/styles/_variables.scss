@@ -1,0 +1,123 @@
+// Variables
+$primary: #9EFD38;
+$primary-dark: #7acc2d;
+$bg-dark: #0a0a0a;
+$bg-card: #1a1a1a;
+$bg-card-hover: #222222;
+$bg-surface: #141414;
+$text-primary: #ffffff;
+$text-secondary: #a0a0a0;
+$text-muted: #666666;
+$border-color: #2a2a2a;
+$danger: #ff4444;
+$warning: #ffaa00;
+$success: #00cc88;
+$info: #4488ff;
+
+// Intensity colors
+$intensity-low: #00cc88;
+$intensity-moderate: #ffaa00;
+$intensity-high: #ff6644;
+$intensity-hiit: #ff2244;
+
+// Fun rating
+$star-active: #FFD700;
+$star-inactive: #333;
+
+// Breakpoints
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+$wide: 1280px;
+
+// Spacing
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+$space-2xl: 48px;
+
+// Radius
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 16px;
+$radius-xl: 24px;
+
+// Mixins
+@mixin card {
+  background: $bg-card;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  padding: $space-lg;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $bg-card-hover;
+    border-color: rgba($primary, 0.3);
+  }
+}
+
+@mixin badge($color) {
+  display: inline-flex;
+  align-items: center;
+  padding: $space-xs $space-sm;
+  border-radius: $radius-sm;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba($color, 0.15);
+  color: $color;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+@mixin button-primary {
+  background: $primary;
+  color: $bg-dark;
+  border: none;
+  border-radius: $radius-sm;
+  padding: $space-sm $space-lg;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $primary-dark;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+@mixin button-outline {
+  background: transparent;
+  color: $primary;
+  border: 1px solid $primary;
+  border-radius: $radius-sm;
+  padding: $space-sm $space-lg;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba($primary, 0.1);
+  }
+}
+
+@mixin section-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: $text-primary;
+  margin-bottom: $space-lg;
+}
+
+@mixin responsive($breakpoint) {
+  @media (max-width: $breakpoint) {
+    @content;
+  }
+}

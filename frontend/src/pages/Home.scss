@@ -1,0 +1,128 @@
+@use '../styles/variables' as *;
+
+.home {
+  &__hero {
+    text-align: center;
+    padding: $space-2xl 0;
+  }
+
+  &__title {
+    font-size: 3rem;
+    font-weight: 900;
+    margin-bottom: $space-md;
+    line-height: 1.1;
+
+    span { color: $primary; }
+
+    @include responsive($tablet) {
+      font-size: 2rem;
+    }
+  }
+
+  &__subtitle {
+    color: $text-secondary;
+    font-size: 1.15rem;
+    max-width: 550px;
+    margin: 0 auto $space-xl;
+    line-height: 1.6;
+  }
+
+  &__cta {
+    display: flex;
+    gap: $space-md;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  &__btn {
+    padding: $space-md $space-xl;
+    border-radius: $radius-sm;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.2s;
+
+    &--primary {
+      background: $primary;
+      color: $bg-dark;
+
+      &:hover {
+        background: $primary-dark;
+        transform: translateY(-2px);
+      }
+    }
+
+    &--outline {
+      border: 1px solid $primary;
+      color: $primary;
+
+      &:hover {
+        background: rgba($primary, 0.1);
+      }
+    }
+  }
+
+  &__features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $space-lg;
+    margin: $space-2xl 0;
+
+    @include responsive($tablet) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__feature {
+    @include card;
+    text-align: center;
+    text-decoration: none;
+
+    &-emoji {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: $space-md;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: $text-primary;
+      margin-bottom: $space-sm;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: $text-secondary;
+      line-height: 1.5;
+    }
+  }
+
+  &__goals {
+    text-align: center;
+    margin-bottom: $space-2xl;
+
+    h2 {
+      @include section-title;
+    }
+
+    &-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: $space-md;
+      justify-content: center;
+    }
+  }
+
+  &__goal {
+    @include card;
+    display: flex;
+    align-items: center;
+    gap: $space-sm;
+    padding: $space-md $space-lg;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: $text-primary;
+  }
+}

@@ -1,0 +1,46 @@
+@use '../styles/variables' as *;
+
+.goal-selector {
+  &__title {
+    @include section-title;
+    text-align: center;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: $space-md;
+  }
+
+  &__card {
+    @include card;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: $space-sm;
+    cursor: pointer;
+    border: 2px solid transparent;
+
+    &--active {
+      border-color: $primary;
+      background: rgba($primary, 0.08);
+    }
+  }
+
+  &__emoji {
+    font-size: 2rem;
+  }
+
+  &__label {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: $text-primary;
+  }
+
+  &__desc {
+    font-size: 0.8rem;
+    color: $text-secondary;
+    line-height: 1.4;
+  }
+}

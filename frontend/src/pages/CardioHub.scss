@@ -1,0 +1,159 @@
+@use '../styles/variables' as *;
+
+.cardio-page {
+  &__controls {
+    display: flex;
+    gap: $space-md;
+    margin-bottom: $space-xl;
+    align-items: flex-end;
+    flex-wrap: wrap;
+  }
+
+  &__filters {
+    display: flex;
+    gap: $space-md;
+    flex: 1;
+    flex-wrap: wrap;
+
+    input, select {
+      flex: 1;
+      min-width: 160px;
+    }
+  }
+
+  &__surprise {
+    @include button-primary;
+    padding: $space-sm $space-xl;
+    font-size: 1rem;
+    white-space: nowrap;
+  }
+
+  &__surprise-result {
+    @include card;
+    border-color: $primary;
+    margin-bottom: $space-xl;
+    padding: $space-lg;
+  }
+
+  &__surprise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $space-md;
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: $primary;
+    }
+
+    button {
+      background: none;
+      border: none;
+      color: $text-muted;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $space-md;
+  }
+
+  &__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: $text-muted;
+    padding: $space-2xl;
+  }
+
+  &__overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $space-lg;
+  }
+
+  &__detail {
+    background: $bg-surface;
+    border: 1px solid $border-color;
+    border-radius: $radius-lg;
+    padding: $space-xl;
+    max-width: 600px;
+    width: 100%;
+    position: relative;
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: $space-md;
+    }
+
+    &-meta {
+      display: flex;
+      gap: $space-md;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: $space-lg;
+      font-size: 0.9rem;
+      color: $text-secondary;
+    }
+
+    &-desc {
+      color: $text-secondary;
+      line-height: 1.7;
+      margin-bottom: $space-lg;
+    }
+
+    &-tags {
+      display: flex;
+      gap: $space-xs;
+      flex-wrap: wrap;
+      margin-top: $space-md;
+    }
+  }
+
+  &__close {
+    position: absolute;
+    top: $space-md;
+    right: $space-md;
+    background: none;
+    border: none;
+    color: $text-muted;
+    font-size: 1.2rem;
+    cursor: pointer;
+
+    &:hover { color: $text-primary; }
+  }
+
+  &__howto {
+    margin-bottom: $space-md;
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: $primary;
+      margin-bottom: $space-sm;
+    }
+
+    p {
+      color: $text-secondary;
+      line-height: 1.6;
+      font-size: 0.9rem;
+    }
+  }
+
+  &__tag {
+    font-size: 0.7rem;
+    color: $text-muted;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2px 8px;
+    border-radius: 3px;
+  }
+}
