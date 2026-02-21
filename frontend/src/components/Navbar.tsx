@@ -1,13 +1,15 @@
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../store/hooks';
 import { logout } from '../store/authSlice';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import './Navbar.scss';
 
 export default function Navbar() {
   const { isAuthenticated, user } = useAppSelector((s) => s.auth);
   const dispatch = useAppDispatch();
   const { pathname } = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const links = [
     { to: '/', label: 'Home' },
@@ -79,7 +81,56 @@ export default function Navbar() {
             </>
           )}
         </div>
+
+        <button
+          className={`navbar__hamburger ${menuOpen ? 'navbar__hamburger--open' : ''}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </div>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className="navbar__mobile-menu"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            {allLinks.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className={`navbar__mobile-link ${pathname === l.to ? 'navbar__mobile-link--active' : ''}`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {l.label}
+              </Link>
+            ))}
+            <div className="navbar__mobile-auth">
+              {isAuthenticated ? (
+                <button
+                  className="navbar__btn navbar__btn--outline"
+                  onClick={() => { dispatch(logout()); setMenuOpen(false); }}
+                >
+                  Logout
+                </button>
+              ) : (
+                <>
+                  <Link to="/login" className="navbar__btn navbar__btn--outline" onClick={() => setMenuOpen(false)}>Login</Link>
+                  <Link to="/register" className="navbar__btn navbar__btn--primary" onClick={() => setMenuOpen(false)}>Sign Up</Link>
+                </>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

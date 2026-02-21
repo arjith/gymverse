@@ -67,16 +67,26 @@
 
   &__close {
     position: absolute;
-    top: $space-md;
-    right: $space-md;
-    background: none;
+    top: $space-sm;
+    right: $space-sm;
+    background: rgba(255, 255, 255, 0.06);
     border: none;
     color: $text-muted;
     font-size: 1.2rem;
     cursor: pointer;
     z-index: 1;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: $radius-sm;
+    transition: all 0.2s;
 
-    &:hover { color: $text-primary; }
+    &:hover {
+      color: $text-primary;
+      background: rgba(255, 255, 255, 0.1);
+    }
   }
 
   &__gallery {

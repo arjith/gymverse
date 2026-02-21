@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchCardio, fetchRandomCardio, setCardioFilters, setSelectedActivity, clearSurprise } from '../store/cardioSlice';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -31,6 +32,22 @@ export default function CardioHub() {
   const { activities, surpriseActivity, loading, filters } = useAppSelector((s) => s.cardio);
   const detailActivity = useAppSelector((s) => s.cardio.selectedActivity);
   const selectActivity = (a: CardioActivity | null) => dispatch(setSelectedActivity(a));
+
+  useEffect(() => {
+    if (detailActivity) {
+      document.body.style.overflow = 'hidden';
+      const onKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') selectActivity(null);
+      };
+      window.addEventListener('keydown', onKeyDown);
+      return () => {
+        document.body.style.overflow = '';
+        window.removeEventListener('keydown', onKeyDown);
+      };
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [detailActivity]);
 
   useEffect(() => {
     const params: Record<string, string> = {};
@@ -138,84 +155,90 @@ export default function CardioHub() {
         </motion.div>
       )}
 
-      <AnimatePresence mode="wait">
-        {detailActivity && (
-          <motion.div
-            key={detailActivity.id}
-            className="cardio-page__overlay"
-            onClick={() => selectActivity(null)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
+      {createPortal(
+        <AnimatePresence mode="wait">
+          {detailActivity && (
             <motion.div
-              className="cardio-page__detail"
-              onClick={(e) => e.stopPropagation()}
-              initial={{ opacity: 0, scale: 0.92, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+              key={detailActivity.id}
+              className="cardio-page__overlay"
+              onClick={() => selectActivity(null)}
+              role="dialog"
+              aria-modal="true"
+              aria-label={detailActivity.name}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              <button className="cardio-page__close" onClick={() => selectActivity(null)}>✕</button>
-              {detailActivity.imageUrl && (
+              <motion.div
+                className="cardio-page__detail"
+                onClick={(e) => e.stopPropagation()}
+                initial={{ opacity: 0, scale: 0.92, y: 30 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+              >
+                <button className="cardio-page__close" onClick={() => selectActivity(null)}>✕</button>
+                {detailActivity.imageUrl && (
+                  <motion.div
+                    className="cardio-page__detail-hero"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    <img src={detailActivity.imageUrl} alt={detailActivity.name} />
+                  </motion.div>
+                )}
+                <motion.h2
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.15 }}
+                >
+                  {detailActivity.name}
+                </motion.h2>
                 <motion.div
-                  className="cardio-page__detail-hero"
+                  className="cardio-page__detail-meta"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <span className="badge badge--primary">{detailActivity.category}</span>
+                  <span className="badge badge--info">{detailActivity.intensityLevel}</span>
+                  <span>🔥 {detailActivity.caloriesPerHour} cal/hr</span>
+                  <span>⏱ {detailActivity.durationMin} min</span>
+                </motion.div>
+                <motion.p
+                  className="cardio-page__detail-desc"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
+                  transition={{ delay: 0.25 }}
                 >
-                  <img src={detailActivity.imageUrl} alt={detailActivity.name} />
+                  {detailActivity.description}
+                </motion.p>
+                <motion.div
+                  className="cardio-page__howto"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h3>🚀 How to Start</h3>
+                  <p>{detailActivity.howToStart}</p>
                 </motion.div>
-              )}
-              <motion.h2
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.15 }}
-              >
-                {detailActivity.name}
-              </motion.h2>
-              <motion.div
-                className="cardio-page__detail-meta"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-              >
-                <span className="badge badge--primary">{detailActivity.category}</span>
-                <span className="badge badge--info">{detailActivity.intensityLevel}</span>
-                <span>🔥 {detailActivity.caloriesPerHour} cal/hr</span>
-                <span>⏱ {detailActivity.durationMin} min</span>
-              </motion.div>
-              <motion.p
-                className="cardio-page__detail-desc"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25 }}
-              >
-                {detailActivity.description}
-              </motion.p>
-              <motion.div
-                className="cardio-page__howto"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <h3>🚀 How to Start</h3>
-                <p>{detailActivity.howToStart}</p>
-              </motion.div>
-              <motion.div
-                className="cardio-page__detail-tags"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.35 }}
-              >
-                {detailActivity.tags.map((t) => (
-                  <span key={t} className="cardio-page__tag">{t}</span>
-                ))}
+                <motion.div
+                  className="cardio-page__detail-tags"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.35 }}
+                >
+                  {detailActivity.tags.map((t) => (
+                    <span key={t} className="cardio-page__tag">{t}</span>
+                  ))}
+                </motion.div>
               </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
