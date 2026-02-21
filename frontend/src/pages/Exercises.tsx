@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchExercises, fetchExerciseDetail, setFilters, clearSelection } from '../store/exerciseSlice';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExerciseCard from '../components/ExerciseCard';
-import ExerciseAnimDemo from '../components/ExerciseAnimDemo';
+import ExercisePlayer from '../components/ExercisePlayer';
 import ScrollReveal from '../components/ScrollReveal';
 import { Exercise } from '../types';
 import './Exercises.scss';
@@ -144,10 +144,11 @@ export default function Exercises() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
                 >
-                  <ExerciseAnimDemo
+                  <ExercisePlayer
                     images={selectedExercise.imageUrls}
-                    alt={selectedExercise.name}
-                    autoPlay
+                    exerciseName={selectedExercise.name}
+                    muscleGroup={selectedExercise.muscleGroup}
+                    size="lg"
                   />
                 </motion.div>
               )}

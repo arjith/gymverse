@@ -29,7 +29,8 @@ const gridItemVariants = {
 export default function CardioHub() {
   const dispatch = useAppDispatch();
   const { activities, surpriseActivity, loading, filters } = useAppSelector((s) => s.cardio);
-  const [detailActivity, setDetailActivity] = [useAppSelector((s) => s.cardio.selectedActivity), (a: CardioActivity | null) => dispatch(setSelectedActivity(a))];
+  const detailActivity = useAppSelector((s) => s.cardio.selectedActivity);
+  const selectActivity = (a: CardioActivity | null) => dispatch(setSelectedActivity(a));
 
   useEffect(() => {
     const params: Record<string, string> = {};
@@ -105,7 +106,7 @@ export default function CardioHub() {
               <h2>✨ Your Surprise Activity</h2>
               <button onClick={() => dispatch(clearSurprise())}>✕</button>
             </div>
-            <CardioCard activity={surpriseActivity} onSelect={setDetailActivity} highlight />
+            <CardioCard activity={surpriseActivity} onSelect={selectActivity} highlight />
           </motion.div>
         )}
       </AnimatePresence>
@@ -122,7 +123,7 @@ export default function CardioHub() {
         >
           {activities.map((a) => (
             <motion.div key={a.id} variants={gridItemVariants}>
-              <CardioCard activity={a} onSelect={setDetailActivity} />
+              <CardioCard activity={a} onSelect={selectActivity} />
             </motion.div>
           ))}
           {activities.length === 0 && (
@@ -137,11 +138,12 @@ export default function CardioHub() {
         </motion.div>
       )}
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {detailActivity && (
           <motion.div
+            key={detailActivity.id}
             className="cardio-page__overlay"
-            onClick={() => setDetailActivity(null)}
+            onClick={() => selectActivity(null)}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -154,7 +156,7 @@ export default function CardioHub() {
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
-              <button className="cardio-page__close" onClick={() => setDetailActivity(null)}>✕</button>
+              <button className="cardio-page__close" onClick={() => selectActivity(null)}>✕</button>
               {detailActivity.imageUrl && (
                 <motion.div
                   className="cardio-page__detail-hero"

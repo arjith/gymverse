@@ -1,6 +1,6 @@
 import { Exercise } from '../types';
 import { motion } from 'framer-motion';
-import ExerciseAnimDemo from './ExerciseAnimDemo';
+import ExercisePlayer from './ExercisePlayer';
 import './ExerciseCard.scss';
 
 interface Props {
@@ -24,7 +24,12 @@ export default function ExerciseCard({ exercise, onSelect, compact }: Props) {
       transition={{ type: 'spring', stiffness: 300, damping: 25 }}
     >
       {exercise.imageUrls?.length > 0 && (
-        <ExerciseAnimDemo images={exercise.imageUrls} alt={exercise.name} />
+        <ExercisePlayer
+          images={exercise.imageUrls}
+          exerciseName={exercise.name}
+          muscleGroup={exercise.muscleGroup}
+          size="md"
+        />
       )}
 
       <div className="exercise-card__body">

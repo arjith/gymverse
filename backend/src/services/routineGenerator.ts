@@ -317,3 +317,33 @@ function formatGoalName(goal: FitnessGoal): string {
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ');
 }
+
+/** Resolve exerciseIds and cardioIds to full names/images for rich frontend display */
+export function enrichRoutine(routine: Routine): Routine {
+  const enrichedWeeks = routine.weeks.map((week) => ({
+    ...week,
+    days: week.days.map((day) => ({
+      ...day,
+      exercises: day.exercises.map((ex) => {
+        const found = exercises.find((e) => e.id === ex.exerciseId);
+        return {
+          ...ex,
+          exerciseName: found?.name,
+          imageUrls: found?.imageUrls,
+          muscleGroup: found?.muscleGroup,
+          equipment: found?.equipment,
+          instructions: found?.instructions,
+          tips: found?.tips,
+        };
+      }),
+      cardio: day.cardio
+        ? {
+            ...day.cardio,
+            cardioName: cardioActivities.find((c) => c.id === day.cardio!.cardioId)?.name,
+            imageUrl: cardioActivities.find((c) => c.id === day.cardio!.cardioId)?.imageUrl,
+          }
+        : undefined,
+    })),
+  }));
+  return { ...routine, weeks: enrichedWeeks };
+}

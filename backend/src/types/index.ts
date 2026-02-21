@@ -80,11 +80,21 @@ export interface RoutineExercise {
   restSeconds: number;
   order: number;
   alternateIds: string[];
+  // Enrichment fields (populated by enrichRoutine)
+  exerciseName?: string;
+  imageUrls?: string[];
+  muscleGroup?: string;
+  equipment?: string;
+  instructions?: string[];
+  tips?: string[];
 }
 
 export interface RoutineCardio {
   cardioId: string;
   durationMin: number;
+  // Enrichment fields
+  cardioName?: string;
+  imageUrl?: string;
 }
 
 export interface RoutineDay {

@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import { Routine, GenerateRoutineRequest } from '../types';
 import { authMiddleware, AuthRequest } from '../middleware/auth';
-import { generateRoutine } from '../services/routineGenerator';
+import { generateRoutine, enrichRoutine } from '../services/routineGenerator';
 
 const router = Router();
 
@@ -22,7 +22,7 @@ router.post('/generate', authMiddleware, (req: AuthRequest, res: Response) => {
 
   const routine = generateRoutine(body, req.user!.userId);
   routines.push(routine);
-  res.status(201).json({ routine });
+  res.status(201).json({ routine: enrichRoutine(routine) });
 });
 
 // POST /api/routines/preview - Generate without saving (no auth required)
@@ -37,13 +37,13 @@ router.post('/preview', (req: Request, res: Response) => {
   }
 
   const routine = generateRoutine(body, 'preview');
-  res.json({ routine });
+  res.json({ routine: enrichRoutine(routine) });
 });
 
 // GET /api/routines - Get user's saved routines
 router.get('/', authMiddleware, (req: AuthRequest, res: Response) => {
   const userRoutines = routines.filter((r) => r.userId === req.user!.userId);
-  res.json({ routines: userRoutines });
+  res.json({ routines: userRoutines.map(enrichRoutine) });
 });
 
 // GET /api/routines/:id - Get routine detail
@@ -55,7 +55,7 @@ router.get('/:id', authMiddleware, (req: AuthRequest, res: Response) => {
     res.status(404).json({ error: 'Routine not found' });
     return;
   }
-  res.json({ routine });
+  res.json({ routine: enrichRoutine(routine) });
 });
 
 // PUT /api/routines/:id - Update routine
