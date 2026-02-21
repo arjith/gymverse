@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchExercises, fetchExerciseDetail, setFilters, clearSelection } from '../store/exerciseSlice';
 import ExerciseCard from '../components/ExerciseCard';
+import ExerciseAnimDemo from '../components/ExerciseAnimDemo';
 import { Exercise } from '../types';
 import './Exercises.scss';
 
@@ -82,15 +83,11 @@ export default function Exercises() {
 
             {selectedExercise.imageUrls?.length > 0 && (
               <div className="exercises-page__gallery">
-                {selectedExercise.imageUrls.map((url, i) => (
-                  <img
-                    key={i}
-                    src={url}
-                    alt={`${selectedExercise.name} - position ${i + 1}`}
-                    className="exercises-page__gallery-img"
-                    loading="lazy"
-                  />
-                ))}
+                <ExerciseAnimDemo
+                  images={selectedExercise.imageUrls}
+                  alt={selectedExercise.name}
+                  autoPlay
+                />
               </div>
             )}
 

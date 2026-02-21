@@ -34,6 +34,15 @@
     aspect-ratio: 16 / 9;
     overflow: hidden;
     background: rgba(255, 255, 255, 0.03);
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 50%);
+      pointer-events: none;
+    }
   }
 
   &__img {
@@ -41,11 +50,11 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.3s ease;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &:hover &__img {
-    transform: scale(1.05);
+    transform: scale(1.06);
   }
 
   &__header {
@@ -101,6 +110,6 @@
   &__duration {
     font-size: 0.8rem;
     color: $text-muted;
-    padding-bottom: $space-lg;
+    padding: 0 $space-lg $space-lg;
   }
 }

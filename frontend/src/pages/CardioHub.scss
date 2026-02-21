@@ -59,7 +59,16 @@
   &__grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: $space-md;
+    gap: $space-lg;
+
+    > * {
+      animation: fadeInUp 0.4s ease-out both;
+      @for $i from 1 through 20 {
+        &:nth-child(#{$i}) {
+          animation-delay: #{$i * 0.04}s;
+        }
+      }
+    }
   }
 
   &__empty {
@@ -72,12 +81,14 @@
   &__overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
     z-index: 200;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: $space-lg;
+    animation: fadeInUp 0.25s ease-out;
   }
 
   &__detail {
@@ -88,6 +99,9 @@
     max-width: 600px;
     width: 100%;
     position: relative;
+    animation: fadeInUp 0.35s ease-out;
+    max-height: 85vh;
+    overflow-y: auto;
 
     h2 {
       font-size: 1.5rem;
@@ -128,8 +142,23 @@
     color: $text-muted;
     font-size: 1.2rem;
     cursor: pointer;
+    z-index: 1;
 
     &:hover { color: $text-primary; }
+  }
+
+  &__detail-hero {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: $radius-sm;
+    margin-bottom: $space-lg;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
 
   &__howto {

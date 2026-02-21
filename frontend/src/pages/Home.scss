@@ -12,10 +12,17 @@
 
   &__hero-bg {
     width: 100%;
-    height: 380px;
+    height: 420px;
     object-fit: cover;
     display: block;
-    filter: brightness(0.35);
+    filter: brightness(0.3);
+    animation: kenBurns 25s ease-in-out infinite;
+  }
+
+  @keyframes kenBurns {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.08) translate(-0.5%, -0.3%); }
+    100% { transform: scale(1); }
   }
 
   &__hero-content {
@@ -97,24 +104,43 @@
 
   &__feature {
     @include card;
-    text-align: center;
     text-decoration: none;
+    overflow: hidden;
+    padding: 0;
+    animation: fadeInUp 0.5s ease-out both;
 
-    &-emoji {
-      font-size: 2.5rem;
+    &-img-wrap {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+    }
+
+    &-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
-      margin-bottom: $space-md;
+      transition: transform 0.5s ease;
+    }
+
+    &:hover &-img {
+      transform: scale(1.06);
+    }
+
+    &-body {
+      padding: $space-lg;
     }
 
     h3 {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 700;
       color: $text-primary;
-      margin-bottom: $space-sm;
+      margin-bottom: $space-xs;
+      letter-spacing: -0.3px;
     }
 
     p {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: $text-secondary;
       line-height: 1.5;
     }
@@ -146,5 +172,10 @@
     font-weight: 600;
     font-size: 0.95rem;
     color: $text-primary;
+
+    &:hover {
+      border-color: rgba($accent, 0.25);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba($accent, 0.08);
+    }
   }
 }

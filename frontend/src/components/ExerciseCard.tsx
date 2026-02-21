@@ -1,5 +1,5 @@
-import { useState } from 'react';
 import { Exercise } from '../types';
+import ExerciseAnimDemo from './ExerciseAnimDemo';
 import './ExerciseCard.scss';
 
 interface Props {
@@ -15,21 +15,10 @@ const difficultyColor: Record<string, string> = {
 };
 
 export default function ExerciseCard({ exercise, onSelect, compact }: Props) {
-  const [imgError, setImgError] = useState(false);
-  const imgSrc = exercise.imageUrls?.[0];
-
   return (
     <div className={`exercise-card ${compact ? 'exercise-card--compact' : ''}`} onClick={() => onSelect(exercise)}>
-      {imgSrc && !imgError && (
-        <div className="exercise-card__img-wrap">
-          <img
-            src={imgSrc}
-            alt={exercise.name}
-            className="exercise-card__img"
-            loading="lazy"
-            onError={() => setImgError(true)}
-          />
-        </div>
+      {exercise.imageUrls?.length > 0 && (
+        <ExerciseAnimDemo images={exercise.imageUrls} alt={exercise.name} />
       )}
 
       <div className="exercise-card__body">

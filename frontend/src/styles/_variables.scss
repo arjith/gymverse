@@ -1,14 +1,15 @@
 // Variables
 $primary: #9EFD38;
 $primary-dark: #7acc2d;
-$bg-dark: #0a0a0a;
-$bg-card: #1a1a1a;
-$bg-card-hover: #222222;
-$bg-surface: #141414;
-$text-primary: #ffffff;
-$text-secondary: #a0a0a0;
-$text-muted: #666666;
-$border-color: #2a2a2a;
+$accent: #C9A96E;
+$bg-dark: #050505;
+$bg-card: #111111;
+$bg-card-hover: #191919;
+$bg-surface: #0d0d0d;
+$text-primary: #f0f0f0;
+$text-secondary: #8a8a8a;
+$text-muted: #555555;
+$border-color: #1a1a1a;
 $danger: #ff4444;
 $warning: #ffaa00;
 $success: #00cc88;
@@ -50,11 +51,13 @@ $radius-xl: 24px;
   border: 1px solid $border-color;
   border-radius: $radius-md;
   padding: $space-lg;
-  transition: all 0.2s ease;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     background: $bg-card-hover;
-    border-color: rgba($primary, 0.3);
+    border-color: rgba($primary, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba($primary, 0.06);
+    transform: translateY(-2px);
   }
 }
 

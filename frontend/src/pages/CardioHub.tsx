@@ -89,6 +89,11 @@ export default function CardioHub() {
         <div className="cardio-page__overlay" onClick={() => setDetailActivity(null)}>
           <div className="cardio-page__detail" onClick={(e) => e.stopPropagation()}>
             <button className="cardio-page__close" onClick={() => setDetailActivity(null)}>✕</button>
+            {detailActivity.imageUrl && (
+              <div className="cardio-page__detail-hero">
+                <img src={detailActivity.imageUrl} alt={detailActivity.name} />
+              </div>
+            )}
             <h2>{detailActivity.name}</h2>
             <div className="cardio-page__detail-meta">
               <span className="badge badge--primary">{detailActivity.category}</span>
