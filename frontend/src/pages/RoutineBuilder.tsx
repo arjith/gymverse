@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { previewRoutine, generateRoutine, clearPreview } from '../store/routineSlice';
+import { motion, AnimatePresence } from 'framer-motion';
 import GoalSelector from '../components/GoalSelector';
 import RoutineView from '../components/RoutineView';
 import { FitnessGoal, FitnessLevel, Equipment, GenerateRoutineRequest } from '../types';
 import './RoutineBuilder.scss';
 
 const equipmentOptions: Equipment[] = ['barbell', 'dumbbell', 'cable', 'machine', 'bodyweight', 'kettlebell', 'resistance-band'];
+
+const stepVariants = {
+  initial: { opacity: 0, x: 40 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -40 },
+};
 
 export default function RoutineBuilder() {
   const dispatch = useAppDispatch();
@@ -61,128 +68,239 @@ export default function RoutineBuilder() {
 
       <div className="builder-page__steps">
         {[1, 2, 3].map((s) => (
-          <div
+          <motion.div
             key={s}
             className={`builder-page__step ${step >= s ? 'builder-page__step--active' : ''}`}
+            animate={step >= s ? { scale: [1, 1.2, 1], borderColor: '#9EFD38' } : {}}
+            transition={{ duration: 0.3 }}
           >
             {s}
-          </div>
+          </motion.div>
         ))}
       </div>
 
-      {step === 1 && (
-        <div className="builder-page__section">
-          <GoalSelector selected={goal} onSelect={(g) => { setGoal(g); setStep(2); }} />
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {step === 1 && (
+          <motion.div
+            key="step1"
+            className="builder-page__section"
+            variants={stepVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.35 }}
+          >
+            <GoalSelector selected={goal} onSelect={(g) => { setGoal(g); setStep(2); }} />
+          </motion.div>
+        )}
 
-      {step === 2 && (
-        <div className="builder-page__section">
-          <h2 className="builder-page__section-title">Customize Your Plan</h2>
+        {step === 2 && (
+          <motion.div
+            key="step2"
+            className="builder-page__section"
+            variants={stepVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.35 }}
+          >
+            <h2 className="builder-page__section-title">Customize Your Plan</h2>
 
-          <div className="builder-page__form">
-            <div className="builder-page__field">
-              <label>Days per Week</label>
-              <div className="builder-page__days">
-                {[3, 4, 5, 6].map((d) => (
-                  <button
-                    key={d}
-                    className={`builder-page__day-btn ${daysPerWeek === d ? 'builder-page__day-btn--active' : ''}`}
-                    onClick={() => setDaysPerWeek(d)}
+            <div className="builder-page__form">
+              <motion.div
+                className="builder-page__field"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+              >
+                <label>Days per Week</label>
+                <div className="builder-page__days">
+                  {[3, 4, 5, 6].map((d) => (
+                    <motion.button
+                      key={d}
+                      className={`builder-page__day-btn ${daysPerWeek === d ? 'builder-page__day-btn--active' : ''}`}
+                      onClick={() => setDaysPerWeek(d)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {d} days
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="builder-page__field"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 }}
+              >
+                <label>Session Duration: {sessionDuration} min</label>
+                <input
+                  type="range"
+                  min="30"
+                  max="120"
+                  step="15"
+                  value={sessionDuration}
+                  onChange={(e) => setSessionDuration(Number(e.target.value))}
+                />
+              </motion.div>
+
+              <motion.div
+                className="builder-page__field"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <label>Fitness Level</label>
+                <div className="builder-page__levels">
+                  {(['beginner', 'intermediate', 'advanced'] as FitnessLevel[]).map((l) => (
+                    <motion.button
+                      key={l}
+                      className={`builder-page__level-btn ${fitnessLevel === l ? 'builder-page__level-btn--active' : ''}`}
+                      onClick={() => setFitnessLevel(l)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {l}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.div
+                className="builder-page__field"
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                <label>Available Equipment</label>
+                <div className="builder-page__equip">
+                  {equipmentOptions.map((eq) => (
+                    <motion.button
+                      key={eq}
+                      className={`builder-page__equip-btn ${equipment.includes(eq) ? 'builder-page__equip-btn--active' : ''}`}
+                      onClick={() => toggleEquipment(eq)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {eq}
+                    </motion.button>
+                  ))}
+                </div>
+              </motion.div>
+
+              <motion.button
+                className="builder-page__gen-btn"
+                onClick={handlePreview}
+                disabled={!goal || equipment.length === 0}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                Preview Routine
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+
+        {step === 3 && (
+          <motion.div
+            key="step3"
+            className="builder-page__section"
+            variants={stepVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.35 }}
+          >
+            {loading ? (
+              <div className="loading-container"><div className="spinner" /></div>
+            ) : preview ? (
+              <>
+                <RoutineView routine={preview} />
+                <motion.div
+                  className="builder-page__actions"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <motion.button
+                    className="builder-page__action-btn builder-page__action-btn--outline"
+                    onClick={() => setStep(2)}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    {d} days
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="builder-page__field">
-              <label>Session Duration: {sessionDuration} min</label>
-              <input
-                type="range"
-                min="30"
-                max="120"
-                step="15"
-                value={sessionDuration}
-                onChange={(e) => setSessionDuration(Number(e.target.value))}
-              />
-            </div>
-
-            <div className="builder-page__field">
-              <label>Fitness Level</label>
-              <div className="builder-page__levels">
-                {(['beginner', 'intermediate', 'advanced'] as FitnessLevel[]).map((l) => (
-                  <button
-                    key={l}
-                    className={`builder-page__level-btn ${fitnessLevel === l ? 'builder-page__level-btn--active' : ''}`}
-                    onClick={() => setFitnessLevel(l)}
+                    ← Adjust
+                  </motion.button>
+                  <motion.button
+                    className="builder-page__action-btn builder-page__action-btn--outline"
+                    onClick={handlePreview}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    {l}
-                  </button>
-                ))}
-              </div>
-            </div>
+                    🔄 Regenerate
+                  </motion.button>
+                  {isAuthenticated ? (
+                    <motion.button
+                      className="builder-page__action-btn builder-page__action-btn--primary"
+                      onClick={handleSave}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      💾 Save Routine
+                    </motion.button>
+                  ) : (
+                    <span className="builder-page__login-hint">Log in to save your routine</span>
+                  )}
+                </motion.div>
+              </>
+            ) : error ? (
+              <div className="error-message">{error}</div>
+            ) : null}
+          </motion.div>
+        )}
 
-            <div className="builder-page__field">
-              <label>Available Equipment</label>
-              <div className="builder-page__equip">
-                {equipmentOptions.map((eq) => (
-                  <button
-                    key={eq}
-                    className={`builder-page__equip-btn ${equipment.includes(eq) ? 'builder-page__equip-btn--active' : ''}`}
-                    onClick={() => toggleEquipment(eq)}
-                  >
-                    {eq}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <button className="builder-page__gen-btn" onClick={handlePreview} disabled={!goal || equipment.length === 0}>
-              Preview Routine
-            </button>
-          </div>
-        </div>
-      )}
-
-      {step === 3 && (
-        <div className="builder-page__section">
-          {loading ? (
-            <div className="loading-container"><div className="spinner" /></div>
-          ) : preview ? (
-            <>
-              <RoutineView routine={preview} />
-              <div className="builder-page__actions">
-                <button className="builder-page__action-btn builder-page__action-btn--outline" onClick={() => setStep(2)}>
-                  ← Adjust
-                </button>
-                <button className="builder-page__action-btn builder-page__action-btn--outline" onClick={handlePreview}>
-                  🔄 Regenerate
-                </button>
-                {isAuthenticated ? (
-                  <button className="builder-page__action-btn builder-page__action-btn--primary" onClick={handleSave}>
-                    💾 Save Routine
-                  </button>
-                ) : (
-                  <span className="builder-page__login-hint">Log in to save your routine</span>
-                )}
-              </div>
-            </>
-          ) : error ? (
-            <div className="error-message">{error}</div>
-          ) : null}
-        </div>
-      )}
-
-      {step === 4 && (
-        <div className="builder-page__section builder-page__done">
-          <h2>🎉 Routine Saved!</h2>
-          <p>Your personalized routine has been created and saved.</p>
-          <button className="builder-page__gen-btn" onClick={handleReset}>
-            Build Another Routine
-          </button>
-        </div>
-      )}
+        {step === 4 && (
+          <motion.div
+            key="step4"
+            className="builder-page__section builder-page__done"
+            variants={stepVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.35 }}
+          >
+            <motion.h2
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.1 }}
+            >
+              🎉 Routine Saved!
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              Your personalized routine has been created and saved.
+            </motion.p>
+            <motion.button
+              className="builder-page__gen-btn"
+              onClick={handleReset}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+            >
+              Build Another Routine
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

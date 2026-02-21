@@ -50,6 +50,7 @@
     color: $text-secondary;
     text-decoration: none;
     transition: all 0.2s;
+    position: relative;
 
     &:hover {
       color: $text-primary;
@@ -59,6 +60,17 @@
     &--active {
       color: $primary;
       background: rgba($primary, 0.1);
+    }
+
+    &-indicator {
+      position: absolute;
+      bottom: 0;
+      left: 15%;
+      right: 15%;
+      height: 2px;
+      background: $primary;
+      border-radius: 1px;
+      box-shadow: 0 0 8px rgba($primary, 0.4);
     }
   }
 

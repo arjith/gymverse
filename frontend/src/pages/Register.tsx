@@ -2,7 +2,17 @@ import { useState, FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { register, clearError } from '../store/authSlice';
+import { motion } from 'framer-motion';
 import './Auth.scss';
+
+const formVariants = {
+  hidden: { opacity: 0, y: 32, scale: 0.96 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] as const, staggerChildren: 0.08, delayChildren: 0.15 } },
+};
+const itemVariants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
 
 export default function Register() {
   const dispatch = useAppDispatch();
@@ -22,13 +32,19 @@ export default function Register() {
 
   return (
     <div className="auth-page">
-      <form className="auth-page__form" onSubmit={handleSubmit}>
-        <h1 className="auth-page__title">Join GymVerse</h1>
-        <p className="auth-page__subtitle">Create your free account</p>
+      <motion.form
+        className="auth-page__form"
+        onSubmit={handleSubmit}
+        variants={formVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.h1 className="auth-page__title" variants={itemVariants}>Join GymVerse</motion.h1>
+        <motion.p className="auth-page__subtitle" variants={itemVariants}>Create your free account</motion.p>
 
-        {error && <div className="error-message">{error}</div>}
+        {error && <motion.div className="error-message" initial={{ opacity: 0, x: -12 }} animate={{ opacity: 1, x: 0 }}>{error}</motion.div>}
 
-        <div className="auth-page__field">
+        <motion.div className="auth-page__field" variants={itemVariants}>
           <label>Name</label>
           <input
             type="text"
@@ -37,9 +53,9 @@ export default function Register() {
             placeholder="Your name"
             required
           />
-        </div>
+        </motion.div>
 
-        <div className="auth-page__field">
+        <motion.div className="auth-page__field" variants={itemVariants}>
           <label>Email</label>
           <input
             type="email"
@@ -48,9 +64,9 @@ export default function Register() {
             placeholder="you@example.com"
             required
           />
-        </div>
+        </motion.div>
 
-        <div className="auth-page__field">
+        <motion.div className="auth-page__field" variants={itemVariants}>
           <label>Password</label>
           <input
             type="password"
@@ -60,16 +76,23 @@ export default function Register() {
             required
             minLength={6}
           />
-        </div>
+        </motion.div>
 
-        <button className="auth-page__submit" type="submit" disabled={loading}>
+        <motion.button
+          className="auth-page__submit"
+          type="submit"
+          disabled={loading}
+          variants={itemVariants}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+        >
           {loading ? 'Creating account...' : 'Sign Up'}
-        </button>
+        </motion.button>
 
-        <p className="auth-page__switch">
+        <motion.p className="auth-page__switch" variants={itemVariants}>
           Already have an account? <Link to="/login">Log in</Link>
-        </p>
-      </form>
+        </motion.p>
+      </motion.form>
     </div>
   );
 }

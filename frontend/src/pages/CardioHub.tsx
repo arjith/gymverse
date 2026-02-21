@@ -1,12 +1,30 @@
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchCardio, fetchRandomCardio, setCardioFilters, setSelectedActivity, clearSurprise } from '../store/cardioSlice';
+import { motion, AnimatePresence } from 'framer-motion';
 import CardioCard from '../components/CardioCard';
 import { CardioActivity } from '../types';
 import './CardioHub.scss';
 
 const categories = ['', 'dance', 'sports', 'outdoor', 'playful', 'traditional', 'mind-body'];
 const intensities = ['', 'low', 'moderate', 'high', 'hiit'];
+
+const gridContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.05, delayChildren: 0.1 },
+  },
+};
+
+const gridItemVariants = {
+  hidden: { opacity: 0, y: 25, scale: 0.96 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  },
+};
 
 export default function CardioHub() {
   const dispatch = useAppDispatch();
@@ -33,7 +51,12 @@ export default function CardioHub() {
         <p>Discover fun ways to get your heart pumping — from dance to parkour to trampoline!</p>
       </div>
 
-      <div className="cardio-page__controls">
+      <motion.div
+        className="cardio-page__controls"
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
         <div className="cardio-page__filters">
           <input
             type="text"
@@ -59,61 +82,138 @@ export default function CardioHub() {
           </select>
         </div>
 
-        <button className="cardio-page__surprise" onClick={handleSurprise}>
+        <motion.button
+          className="cardio-page__surprise"
+          onClick={handleSurprise}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           🎲 Surprise Me!
-        </button>
-      </div>
+        </motion.button>
+      </motion.div>
 
-      {surpriseActivity && (
-        <div className="cardio-page__surprise-result">
-          <div className="cardio-page__surprise-header">
-            <h2>✨ Your Surprise Activity</h2>
-            <button onClick={() => dispatch(clearSurprise())}>✕</button>
-          </div>
-          <CardioCard activity={surpriseActivity} onSelect={setDetailActivity} highlight />
-        </div>
-      )}
+      <AnimatePresence>
+        {surpriseActivity && (
+          <motion.div
+            className="cardio-page__surprise-result"
+            initial={{ opacity: 0, scale: 0.9, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: -20 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+          >
+            <div className="cardio-page__surprise-header">
+              <h2>✨ Your Surprise Activity</h2>
+              <button onClick={() => dispatch(clearSurprise())}>✕</button>
+            </div>
+            <CardioCard activity={surpriseActivity} onSelect={setDetailActivity} highlight />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {loading ? (
         <div className="loading-container"><div className="spinner" /></div>
       ) : (
-        <div className="cardio-page__grid">
+        <motion.div
+          className="cardio-page__grid"
+          variants={gridContainerVariants}
+          initial="hidden"
+          animate="visible"
+          key={JSON.stringify(filters)}
+        >
           {activities.map((a) => (
-            <CardioCard key={a.id} activity={a} onSelect={setDetailActivity} />
+            <motion.div key={a.id} variants={gridItemVariants}>
+              <CardioCard activity={a} onSelect={setDetailActivity} />
+            </motion.div>
           ))}
-          {activities.length === 0 && <p className="cardio-page__empty">No cardio activities match your filters.</p>}
-        </div>
+          {activities.length === 0 && (
+            <motion.p
+              className="cardio-page__empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              No cardio activities match your filters.
+            </motion.p>
+          )}
+        </motion.div>
       )}
 
-      {detailActivity && (
-        <div className="cardio-page__overlay" onClick={() => setDetailActivity(null)}>
-          <div className="cardio-page__detail" onClick={(e) => e.stopPropagation()}>
-            <button className="cardio-page__close" onClick={() => setDetailActivity(null)}>✕</button>
-            {detailActivity.imageUrl && (
-              <div className="cardio-page__detail-hero">
-                <img src={detailActivity.imageUrl} alt={detailActivity.name} />
-              </div>
-            )}
-            <h2>{detailActivity.name}</h2>
-            <div className="cardio-page__detail-meta">
-              <span className="badge badge--primary">{detailActivity.category}</span>
-              <span className="badge badge--info">{detailActivity.intensityLevel}</span>
-              <span>🔥 {detailActivity.caloriesPerHour} cal/hr</span>
-              <span>⏱ {detailActivity.durationMin} min</span>
-            </div>
-            <p className="cardio-page__detail-desc">{detailActivity.description}</p>
-            <div className="cardio-page__howto">
-              <h3>🚀 How to Start</h3>
-              <p>{detailActivity.howToStart}</p>
-            </div>
-            <div className="cardio-page__detail-tags">
-              {detailActivity.tags.map((t) => (
-                <span key={t} className="cardio-page__tag">{t}</span>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {detailActivity && (
+          <motion.div
+            className="cardio-page__overlay"
+            onClick={() => setDetailActivity(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="cardio-page__detail"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.92, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <button className="cardio-page__close" onClick={() => setDetailActivity(null)}>✕</button>
+              {detailActivity.imageUrl && (
+                <motion.div
+                  className="cardio-page__detail-hero"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <img src={detailActivity.imageUrl} alt={detailActivity.name} />
+                </motion.div>
+              )}
+              <motion.h2
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.15 }}
+              >
+                {detailActivity.name}
+              </motion.h2>
+              <motion.div
+                className="cardio-page__detail-meta"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                <span className="badge badge--primary">{detailActivity.category}</span>
+                <span className="badge badge--info">{detailActivity.intensityLevel}</span>
+                <span>🔥 {detailActivity.caloriesPerHour} cal/hr</span>
+                <span>⏱ {detailActivity.durationMin} min</span>
+              </motion.div>
+              <motion.p
+                className="cardio-page__detail-desc"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25 }}
+              >
+                {detailActivity.description}
+              </motion.p>
+              <motion.div
+                className="cardio-page__howto"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <h3>🚀 How to Start</h3>
+                <p>{detailActivity.howToStart}</p>
+              </motion.div>
+              <motion.div
+                className="cardio-page__detail-tags"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.35 }}
+              >
+                {detailActivity.tags.map((t) => (
+                  <span key={t} className="cardio-page__tag">{t}</span>
+                ))}
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

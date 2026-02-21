@@ -1,0 +1,45 @@
+@use '../styles/variables' as *;
+
+.floating-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+
+  &__dot {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba($primary, 0.15);
+    animation: floatDrift linear infinite;
+
+    &:nth-child(odd) {
+      background: rgba($accent, 0.1);
+    }
+
+    &:nth-child(3n) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+}
+
+@keyframes floatDrift {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(40px, -80px) scale(1.5);
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate(-30px, -160px) scale(1);
+    opacity: 0;
+  }
+}

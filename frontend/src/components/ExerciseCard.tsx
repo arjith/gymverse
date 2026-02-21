@@ -1,4 +1,5 @@
 import { Exercise } from '../types';
+import { motion } from 'framer-motion';
 import ExerciseAnimDemo from './ExerciseAnimDemo';
 import './ExerciseCard.scss';
 
@@ -16,7 +17,12 @@ const difficultyColor: Record<string, string> = {
 
 export default function ExerciseCard({ exercise, onSelect, compact }: Props) {
   return (
-    <div className={`exercise-card ${compact ? 'exercise-card--compact' : ''}`} onClick={() => onSelect(exercise)}>
+    <motion.div
+      className={`exercise-card ${compact ? 'exercise-card--compact' : ''}`}
+      onClick={() => onSelect(exercise)}
+      whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(158,253,56,0.08)' }}
+      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+    >
       {exercise.imageUrls?.length > 0 && (
         <ExerciseAnimDemo images={exercise.imageUrls} alt={exercise.name} />
       )}
@@ -51,6 +57,6 @@ export default function ExerciseCard({ exercise, onSelect, compact }: Props) {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

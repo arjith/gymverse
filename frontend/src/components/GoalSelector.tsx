@@ -1,4 +1,5 @@
 import { FitnessGoal } from '../types';
+import { motion } from 'framer-motion';
 import './GoalSelector.scss';
 
 interface Props {
@@ -16,23 +17,52 @@ const goals: { value: FitnessGoal; label: string; emoji: string; desc: string }[
   { value: 'stress-relief', label: 'Stress Relief', emoji: '🧘‍♂️', desc: 'Mind-body balance and relaxation' },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.06, delayChildren: 0.15 } },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 20, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  },
+};
+
 export default function GoalSelector({ selected, onSelect }: Props) {
   return (
     <div className="goal-selector">
       <h2 className="goal-selector__title">What's Your Goal?</h2>
-      <div className="goal-selector__grid">
+      <motion.div
+        className="goal-selector__grid"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {goals.map((g) => (
-          <button
+          <motion.button
             key={g.value}
             className={`goal-selector__card ${selected === g.value ? 'goal-selector__card--active' : ''}`}
             onClick={() => onSelect(g.value)}
+            variants={cardVariants}
+            whileHover={{ scale: 1.05, y: -4 }}
+            whileTap={{ scale: 0.97 }}
           >
-            <span className="goal-selector__emoji">{g.emoji}</span>
+            <motion.span
+              className="goal-selector__emoji"
+              whileHover={{ scale: 1.2, rotate: [0, -10, 10, 0] }}
+              transition={{ type: 'spring', stiffness: 400 }}
+            >
+              {g.emoji}
+            </motion.span>
             <span className="goal-selector__label">{g.label}</span>
             <span className="goal-selector__desc">{g.desc}</span>
-          </button>
+          </motion.button>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 }

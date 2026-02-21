@@ -8,14 +8,15 @@
     border-radius: $radius-lg;
     overflow: hidden;
     margin-bottom: $space-xl;
+    min-height: 480px;
   }
 
   &__hero-bg {
     width: 100%;
-    height: 420px;
+    height: 480px;
     object-fit: cover;
     display: block;
-    filter: brightness(0.3);
+    filter: brightness(0.25) saturate(1.2);
     animation: kenBurns 25s ease-in-out infinite;
   }
 
@@ -23,6 +24,19 @@
     0% { transform: scale(1); }
     50% { transform: scale(1.08) translate(-0.5%, -0.3%); }
     100% { transform: scale(1); }
+  }
+
+  &__hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      135deg,
+      rgba($bg-dark, 0.8) 0%,
+      rgba($bg-dark, 0.3) 40%,
+      rgba($primary, 0.05) 70%,
+      rgba($accent, 0.08) 100%
+    );
+    z-index: 1;
   }
 
   &__hero-content {
@@ -33,23 +47,28 @@
     align-items: center;
     justify-content: center;
     padding: $space-xl;
+    z-index: 2;
   }
 
   &__title {
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 900;
     margin-bottom: $space-md;
-    line-height: 1.1;
+    line-height: 1.05;
+    letter-spacing: -1.5px;
 
-    span { color: $primary; }
+    span {
+      color: $primary;
+      text-shadow: 0 0 40px rgba($primary, 0.3);
+    }
 
     @include responsive($tablet) {
-      font-size: 2rem;
+      font-size: 2.2rem;
     }
   }
 
   &__subtitle {
-    color: $text-secondary;
+    color: rgba(255, 255, 255, 0.7);
     font-size: 1.15rem;
     max-width: 550px;
     margin: 0 auto $space-xl;
@@ -69,7 +88,22 @@
     font-weight: 700;
     font-size: 1rem;
     text-decoration: none;
-    transition: all 0.2s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.6s ease;
+    }
+
+    &:hover::after {
+      transform: translateX(100%);
+    }
 
     &--primary {
       background: $primary;
@@ -77,20 +111,58 @@
 
       &:hover {
         background: $primary-dark;
-        transform: translateY(-2px);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba($primary, 0.3);
       }
     }
 
     &--outline {
-      border: 1px solid $primary;
+      border: 1px solid rgba($primary, 0.5);
       color: $primary;
 
       &:hover {
         background: rgba($primary, 0.1);
+        border-color: $primary;
+        transform: translateY(-3px);
       }
     }
   }
 
+  // Stats section
+  &__stats {
+    display: flex;
+    justify-content: center;
+    gap: $space-2xl;
+    padding: $space-2xl 0;
+    margin-bottom: $space-xl;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    flex-wrap: wrap;
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: $space-xs;
+
+    &-num {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: $primary;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+
+    &-label {
+      font-size: 0.85rem;
+      color: $text-muted;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+  }
+
+  // Features section
   &__features {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -107,12 +179,12 @@
     text-decoration: none;
     overflow: hidden;
     padding: 0;
-    animation: fadeInUp 0.5s ease-out both;
 
     &-img-wrap {
       width: 100%;
       aspect-ratio: 16 / 10;
       overflow: hidden;
+      position: relative;
     }
 
     &-img {
@@ -120,19 +192,43 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.5s ease;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    &-icon {
+      position: absolute;
+      bottom: $space-md;
+      right: $space-md;
+      font-size: 2rem;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(10px);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: $radius-md;
+      transition: all 0.4s ease;
+      opacity: 0.8;
+    }
+
+    &:hover &-icon {
+      transform: scale(1.1) rotate(-5deg);
+      opacity: 1;
+      background: rgba($primary, 0.2);
     }
 
     &:hover &-img {
-      transform: scale(1.06);
+      transform: scale(1.08);
     }
 
     &-body {
       padding: $space-lg;
+      position: relative;
     }
 
     h3 {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       font-weight: 700;
       color: $text-primary;
       margin-bottom: $space-xs;
@@ -144,8 +240,25 @@
       color: $text-secondary;
       line-height: 1.5;
     }
+
+    &-arrow {
+      position: absolute;
+      right: $space-lg;
+      top: 50%;
+      transform: translateY(-50%) translateX(-5px);
+      font-size: 1.2rem;
+      color: $primary;
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    &:hover &-arrow {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
   }
 
+  // Goals section
   &__goals {
     text-align: center;
     margin-bottom: $space-2xl;
@@ -172,10 +285,16 @@
     font-weight: 600;
     font-size: 0.95rem;
     color: $text-primary;
+    cursor: pointer;
+
+    &-emoji {
+      font-size: 1.3rem;
+      display: inline-block;
+    }
 
     &:hover {
-      border-color: rgba($accent, 0.25);
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba($accent, 0.08);
+      border-color: rgba($accent, 0.3);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba($accent, 0.1);
     }
   }
 }

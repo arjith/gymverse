@@ -1,4 +1,5 @@
 import { CardioActivity } from '../types';
+import { motion } from 'framer-motion';
 import './CardioCard.scss';
 
 interface Props {
@@ -18,9 +19,15 @@ function FunStars({ rating }: { rating: number }) {
   return (
     <span className="fun-stars">
       {[1, 2, 3, 4, 5].map((i) => (
-        <span key={i} className={i <= rating ? 'fun-stars__star--active' : 'fun-stars__star'}>
+        <motion.span
+          key={i}
+          className={i <= rating ? 'fun-stars__star--active' : 'fun-stars__star'}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: i * 0.08, type: 'spring', stiffness: 300 }}
+        >
           ★
-        </span>
+        </motion.span>
       ))}
     </span>
   );
@@ -28,9 +35,11 @@ function FunStars({ rating }: { rating: number }) {
 
 export default function CardioCard({ activity, onSelect, highlight }: Props) {
   return (
-    <div
+    <motion.div
       className={`cardio-card ${highlight ? 'cardio-card--highlight' : ''}`}
       onClick={() => onSelect(activity)}
+      whileHover={{ y: -4, boxShadow: '0 12px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(158,253,56,0.08)' }}
+      transition={{ type: 'spring', stiffness: 300, damping: 25 }}
     >
       {activity.imageUrl && (
         <div className="cardio-card__img-wrap">
@@ -62,6 +71,6 @@ export default function CardioCard({ activity, onSelect, highlight }: Props) {
       </div>
 
       <div className="cardio-card__duration">{activity.durationMin} min recommended</div>
-    </div>
+    </motion.div>
   );
 }

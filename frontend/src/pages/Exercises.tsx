@@ -1,14 +1,33 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchExercises, fetchExerciseDetail, setFilters, clearSelection } from '../store/exerciseSlice';
+import { motion, AnimatePresence } from 'framer-motion';
 import ExerciseCard from '../components/ExerciseCard';
 import ExerciseAnimDemo from '../components/ExerciseAnimDemo';
+import ScrollReveal from '../components/ScrollReveal';
 import { Exercise } from '../types';
 import './Exercises.scss';
 
 const muscleGroups = ['', 'chest', 'back', 'shoulders', 'legs', 'arms', 'core', 'glutes', 'full-body'];
 const equipmentList = ['', 'barbell', 'dumbbell', 'cable', 'machine', 'bodyweight', 'kettlebell', 'resistance-band'];
 const difficulties = ['', 'beginner', 'intermediate', 'advanced'];
+
+const gridContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.04, delayChildren: 0.1 },
+  },
+};
+
+const gridItemVariants = {
+  hidden: { opacity: 0, y: 25, scale: 0.96 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const },
+  },
+};
 
 export default function Exercises() {
   const dispatch = useAppDispatch();
@@ -41,7 +60,12 @@ export default function Exercises() {
         <p>60+ exercises with alternate options for every move</p>
       </div>
 
-      <div className="exercises-page__filters">
+      <motion.div
+        className="exercises-page__filters"
+        initial={{ opacity: 0, y: -15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+      >
         <input
           type="text"
           placeholder="Search exercises..."
@@ -63,74 +87,135 @@ export default function Exercises() {
             <option key={d} value={d}>{d || 'All Levels'}</option>
           ))}
         </select>
-      </div>
+      </motion.div>
 
       {loading ? (
         <div className="loading-container"><div className="spinner" /></div>
       ) : (
-        <div className="exercises-page__grid">
+        <motion.div
+          className="exercises-page__grid"
+          variants={gridContainerVariants}
+          initial="hidden"
+          animate="visible"
+          key={JSON.stringify(filters)}
+        >
           {exercises.map((ex) => (
-            <ExerciseCard key={ex.id} exercise={ex} onSelect={handleSelect} />
+            <motion.div key={ex.id} variants={gridItemVariants}>
+              <ExerciseCard exercise={ex} onSelect={handleSelect} />
+            </motion.div>
           ))}
-          {exercises.length === 0 && <p className="exercises-page__empty">No exercises match your filters.</p>}
-        </div>
+          {exercises.length === 0 && (
+            <motion.p
+              className="exercises-page__empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              No exercises match your filters.
+            </motion.p>
+          )}
+        </motion.div>
       )}
 
-      {detailOpen && selectedExercise && (
-        <div className="exercises-page__overlay" onClick={closeDetail}>
-          <div className="exercises-page__detail" onClick={(e) => e.stopPropagation()}>
-            <button className="exercises-page__close" onClick={closeDetail}>✕</button>
+      <AnimatePresence>
+        {detailOpen && selectedExercise && (
+          <motion.div
+            className="exercises-page__overlay"
+            onClick={closeDetail}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <motion.div
+              className="exercises-page__detail"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.92, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
+            >
+              <button className="exercises-page__close" onClick={closeDetail}>✕</button>
 
-            {selectedExercise.imageUrls?.length > 0 && (
-              <div className="exercises-page__gallery">
-                <ExerciseAnimDemo
-                  images={selectedExercise.imageUrls}
-                  alt={selectedExercise.name}
-                  autoPlay
-                />
-              </div>
-            )}
+              {selectedExercise.imageUrls?.length > 0 && (
+                <motion.div
+                  className="exercises-page__gallery"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                >
+                  <ExerciseAnimDemo
+                    images={selectedExercise.imageUrls}
+                    alt={selectedExercise.name}
+                    autoPlay
+                  />
+                </motion.div>
+              )}
 
-            <h2>{selectedExercise.name}</h2>
-            <div className="exercises-page__detail-meta">
-              <span className="badge badge--primary">{selectedExercise.muscleGroup}</span>
-              <span className="badge badge--info">{selectedExercise.equipment}</span>
-              <span className="badge badge--warn">{selectedExercise.difficulty}</span>
-            </div>
+              <motion.h2
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                {selectedExercise.name}
+              </motion.h2>
+              <motion.div
+                className="exercises-page__detail-meta"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.25 }}
+              >
+                <span className="badge badge--primary">{selectedExercise.muscleGroup}</span>
+                <span className="badge badge--info">{selectedExercise.equipment}</span>
+                <span className="badge badge--warn">{selectedExercise.difficulty}</span>
+              </motion.div>
 
-            <div className="exercises-page__instructions">
-              <h3>How to Perform</h3>
-              <ol>
-                {selectedExercise.instructions.map((inst, i) => (
-                  <li key={i}>{inst}</li>
-                ))}
-              </ol>
-            </div>
-
-            {selectedExercise.tips.length > 0 && (
-              <div className="exercises-page__tips">
-                <h3>💡 Tips</h3>
-                <ul>
-                  {selectedExercise.tips.map((tip, i) => (
-                    <li key={i}>{tip}</li>
+              <motion.div
+                className="exercises-page__instructions"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <h3>How to Perform</h3>
+                <ol>
+                  {selectedExercise.instructions.map((inst, i) => (
+                    <li key={i}>{inst}</li>
                   ))}
-                </ul>
-              </div>
-            )}
+                </ol>
+              </motion.div>
 
-            {alternates.length > 0 && (
-              <div className="exercises-page__alternates">
-                <h3>🔄 Alternate Exercises</h3>
-                <div className="exercises-page__alt-grid">
-                  {alternates.map((alt) => (
-                    <ExerciseCard key={alt.id} exercise={alt} onSelect={handleSelect} compact />
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+              {selectedExercise.tips.length > 0 && (
+                <motion.div
+                  className="exercises-page__tips"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.35 }}
+                >
+                  <h3>💡 Tips</h3>
+                  <ul>
+                    {selectedExercise.tips.map((tip, i) => (
+                      <li key={i}>{tip}</li>
+                    ))}
+                  </ul>
+                </motion.div>
+              )}
+
+              {alternates.length > 0 && (
+                <ScrollReveal delay={0.1}>
+                  <div className="exercises-page__alternates">
+                    <h3>🔄 Alternate Exercises</h3>
+                    <div className="exercises-page__alt-grid">
+                      {alternates.map((alt) => (
+                        <ExerciseCard key={alt.id} exercise={alt} onSelect={handleSelect} compact />
+                      ))}
+                    </div>
+                  </div>
+                </ScrollReveal>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
