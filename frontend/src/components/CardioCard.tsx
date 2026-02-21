@@ -32,6 +32,17 @@ export default function CardioCard({ activity, onSelect, highlight }: Props) {
       className={`cardio-card ${highlight ? 'cardio-card--highlight' : ''}`}
       onClick={() => onSelect(activity)}
     >
+      {activity.imageUrl && (
+        <div className="cardio-card__img-wrap">
+          <img
+            src={activity.imageUrl}
+            alt={activity.name}
+            className="cardio-card__img"
+            loading="lazy"
+          />
+        </div>
+      )}
+
       <div className="cardio-card__header">
         <h3 className="cardio-card__name">{activity.name}</h3>
         <FunStars rating={activity.funRating} />

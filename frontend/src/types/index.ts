@@ -9,6 +9,7 @@ export interface Exercise {
   instructions: string[];
   tips: string[];
   imageUrl: string;
+  imageUrls: string[];
   tags: string[];
   alternateExerciseIds: string[];
 }

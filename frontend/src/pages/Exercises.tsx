@@ -79,6 +79,21 @@ export default function Exercises() {
         <div className="exercises-page__overlay" onClick={closeDetail}>
           <div className="exercises-page__detail" onClick={(e) => e.stopPropagation()}>
             <button className="exercises-page__close" onClick={closeDetail}>✕</button>
+
+            {selectedExercise.imageUrls?.length > 0 && (
+              <div className="exercises-page__gallery">
+                {selectedExercise.imageUrls.map((url, i) => (
+                  <img
+                    key={i}
+                    src={url}
+                    alt={`${selectedExercise.name} - position ${i + 1}`}
+                    className="exercises-page__gallery-img"
+                    loading="lazy"
+                  />
+                ))}
+              </div>
+            )}
+
             <h2>{selectedExercise.name}</h2>
             <div className="exercises-page__detail-meta">
               <span className="badge badge--primary">{selectedExercise.muscleGroup}</span>

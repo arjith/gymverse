@@ -17,24 +17,29 @@ const goals = [
   { emoji: '🧘‍♂️', label: 'Stress Relief' },
 ];
 
+const HERO_IMG = 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1400&h=600&fit=crop&q=80';
+
 export default function Home() {
   return (
     <div className="home">
       <section className="home__hero">
-        <h1 className="home__title">
-          Your Fitness <span>Universe</span>
-        </h1>
-        <p className="home__subtitle">
-          Discover exercises, explore fun cardio, and build personalized routines
-          based on your fitness goals.
-        </p>
-        <div className="home__cta">
-          <Link to="/routine-builder" className="home__btn home__btn--primary">
-            Build My Routine
-          </Link>
-          <Link to="/exercises" className="home__btn home__btn--outline">
-            Explore Exercises
-          </Link>
+        <img src={HERO_IMG} alt="" className="home__hero-bg" aria-hidden="true" />
+        <div className="home__hero-content">
+          <h1 className="home__title">
+            Your Fitness <span>Universe</span>
+          </h1>
+          <p className="home__subtitle">
+            Discover exercises, explore fun cardio, and build personalized routines
+            based on your fitness goals.
+          </p>
+          <div className="home__cta">
+            <Link to="/routine-builder" className="home__btn home__btn--primary">
+              Build My Routine
+            </Link>
+            <Link to="/exercises" className="home__btn home__btn--outline">
+              Explore Exercises
+            </Link>
+          </div>
         </div>
       </section>
 
