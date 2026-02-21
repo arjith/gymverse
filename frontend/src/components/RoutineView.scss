@@ -99,7 +99,7 @@
 
   &__exercise-row {
     display: grid;
-    grid-template-columns: 92px 1fr auto 28px;
+    grid-template-columns: 164px 1fr auto 28px;
     align-items: center;
     gap: $space-md;
     padding: $space-sm;
@@ -107,21 +107,21 @@
     user-select: none;
 
     @media (max-width: 600px) {
-      grid-template-columns: 64px 1fr auto 24px;
+      grid-template-columns: 100px 1fr auto 24px;
       gap: $space-sm;
     }
   }
 
   &__exercise-thumb {
-    width: 88px;
-    height: 66px;
+    width: 160px;
+    height: 114px;
     border-radius: $radius-sm;
     overflow: hidden;
     flex-shrink: 0;
 
     @media (max-width: 600px) {
-      width: 60px;
-      height: 45px;
+      width: 96px;
+      height: 68px;
     }
   }
 

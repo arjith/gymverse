@@ -1,4 +1,4 @@
-import { AbsoluteFill, Img, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
+import { AbsoluteFill, interpolate, useCurrentFrame, useVideoConfig } from 'remotion';
 
 interface Props {
   images: string[];
@@ -19,7 +19,7 @@ export const ExerciseMotionComp: React.FC<Props> = ({ images, exerciseName, musc
     });
     return (
       <AbsoluteFill style={{ background: '#050505' }}>
-        <Img
+        <img
           src={images[0]}
           style={{
             width: '100%',
@@ -66,7 +66,7 @@ export const ExerciseMotionComp: React.FC<Props> = ({ images, exerciseName, musc
 
   return (
     <AbsoluteFill style={{ background: '#050505' }}>
-      <Img
+      <img
         src={images[0]}
         style={{
           position: 'absolute',
@@ -77,7 +77,7 @@ export const ExerciseMotionComp: React.FC<Props> = ({ images, exerciseName, musc
           transform: `scale(${img1Scale})`,
         }}
       />
-      <Img
+      <img
         src={images[1]}
         style={{
           position: 'absolute',

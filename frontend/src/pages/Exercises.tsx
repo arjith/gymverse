@@ -117,9 +117,10 @@ export default function Exercises() {
         </motion.div>
       )}
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {detailOpen && selectedExercise && (
           <motion.div
+            key={selectedExercise.id}
             className="exercises-page__overlay"
             onClick={closeDetail}
             initial={{ opacity: 0 }}

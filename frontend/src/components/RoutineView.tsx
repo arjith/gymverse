@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Routine, RoutineExercise } from '../types';
 import { motion, AnimatePresence } from 'framer-motion';
 import ExercisePlayer from './ExercisePlayer';
+import ExerciseAnimDemo from './ExerciseAnimDemo';
 import './RoutineView.scss';
 
 interface Props {
@@ -59,11 +60,9 @@ function ExerciseRow({ ex, index }: { ex: RoutineExercise; index: number }) {
       >
         <div className="routine-view__exercise-thumb">
           {ex.imageUrls && ex.imageUrls.length > 0 ? (
-            <ExercisePlayer
+            <ExerciseAnimDemo
               images={ex.imageUrls}
-              exerciseName={name}
-              muscleGroup={ex.muscleGroup || ''}
-              size="sm"
+              alt={name}
             />
           ) : (
             <div className="routine-view__exercise-placeholder">

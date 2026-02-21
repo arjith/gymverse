@@ -19,8 +19,15 @@ export default function ExercisePlayer({ images, exerciseName, muscleGroup, size
 
   const dims = sizeMap[size];
 
+  const interactive = size === 'lg';
+
   return (
-    <div style={{ borderRadius: size === 'sm' ? 6 : 10, overflow: 'hidden', lineHeight: 0 }}>
+    <div style={{
+      borderRadius: size === 'sm' ? 6 : 10,
+      overflow: 'hidden',
+      lineHeight: 0,
+      pointerEvents: interactive ? 'auto' : 'none',
+    }}>
       <Player
         component={ExerciseMotionComp}
         inputProps={{ images, exerciseName, muscleGroup }}
@@ -31,7 +38,8 @@ export default function ExercisePlayer({ images, exerciseName, muscleGroup, size
         style={{ width: '100%', height: 'auto', aspectRatio: `${dims.width}/${dims.height}` }}
         loop
         autoPlay
-        controls={size === 'lg'}
+        controls={interactive}
+        clickToPlay={interactive}
         showVolumeControls={false}
       />
     </div>
