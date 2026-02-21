@@ -14,17 +14,11 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 responses
+// Handle 401 responses (disabled redirect for dev bypass)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
-      localStorage.removeItem('gymverse_token');
-      localStorage.removeItem('gymverse_user');
-      if (window.location.pathname !== '/login') {
-        window.location.href = '/login';
-      }
-    }
+    // Dev bypass: don't redirect to login on 401
     return Promise.reject(error);
   }
 );

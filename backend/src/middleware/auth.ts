@@ -8,7 +8,17 @@ export interface AuthRequest extends Request {
   user?: AuthPayload;
 }
 
+// Default user for development — bypasses JWT auth
+const DEV_BYPASS_AUTH = true;
+const DEFAULT_USER: AuthPayload = { userId: 'demo-user-1', email: 'demo@gymverse.com' };
+
 export function authMiddleware(req: AuthRequest, res: Response, next: NextFunction): void {
+  if (DEV_BYPASS_AUTH) {
+    req.user = DEFAULT_USER;
+    next();
+    return;
+  }
+
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer ')) {

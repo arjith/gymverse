@@ -166,8 +166,8 @@ function getMuscleGroupsForFocus(focus: string): MuscleGroup[] {
   return groups.length > 0 ? groups : ['full-body'];
 }
 
-function filterByEquipment(pool: Exercise[], available: Equipment[]): Exercise[] {
-  if (available.length === 0) return pool;
+function filterByEquipment(pool: Exercise[], available?: Equipment[]): Exercise[] {
+  if (!available || available.length === 0) return pool;
   return pool.filter(
     (e) => available.includes(e.equipment) || e.equipment === 'bodyweight' || e.equipment === 'none'
   );
